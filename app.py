@@ -22,60 +22,77 @@ st.set_page_config(page_title="TennisStats", page_icon="🎾", layout="centered"
 
 COMPACT_CSS = """
 <style>
-/* =========================
-   TENNISSTATS PRO THEME
-   (Solo CSS: sin tocar lógica ni layout)
-   ========================= */
+/* =========================================================
+   TENNISSTATS — PRO SPORT UI (SOLO CSS)
+   - Look profesional, tipo app deportiva
+   - Sin tocar layout/funciones
+   ========================================================= */
+
 :root{
-  --bg0: #0b1220;
-  --bg1: #0e1a2c;
-  --card: rgba(255,255,255,0.06);
-  --card2: rgba(255,255,255,0.08);
-  --stroke: rgba(255,255,255,0.10);
-  --text: rgba(255,255,255,0.92);
-  --muted: rgba(255,255,255,0.70);
-  --muted2: rgba(255,255,255,0.55);
-  --accent: #25d366;     /* “verde pista” */
-  --accent2:#3b82f6;     /* azul deportivo */
-  --danger: #ef4444;
-  --warn: #f59e0b;
-  --radius: 16px;
-  --shadow: 0 10px 28px rgba(0,0,0,.28);
-  --shadow2: 0 8px 18px rgba(0,0,0,.22);
+  /* Paleta deportiva (pista + azul performance) */
+  --bg: #f6f8fb;
+  --bg2:#eef2f7;
+
+  --card: #ffffff;
+  --card2:#fbfcff;
+
+  --text:#0f172a;
+  --muted:#475569;
+  --muted2:#64748b;
+
+  --stroke: rgba(15,23,42,0.10);
+  --stroke2: rgba(15,23,42,0.08);
+
+  --accent:#16a34a;    /* verde tenis */
+  --accent2:#2563eb;   /* azul sport */
+  --danger:#dc2626;    /* rojo */
+  --warning:#f59e0b;
+
+  --radius: 18px;
+  --shadow: 0 18px 40px rgba(2,6,23,.10);
+  --shadow2: 0 10px 22px rgba(2,6,23,.08);
+
+  --focus: 0 0 0 3px rgba(37,99,235,.16);
 }
 
-/* Fondo general */
+/* ---------- App background (claro + textura pista) ---------- */
 html, body, [data-testid="stAppViewContainer"]{
   background:
-    radial-gradient(1200px 420px at 12% 0%, rgba(37,211,102,0.14), transparent 55%),
-    radial-gradient(900px 420px at 88% 10%, rgba(59,130,246,0.14), transparent 55%),
-    linear-gradient(180deg, var(--bg0), var(--bg1));
+    radial-gradient(900px 380px at 15% -5%, rgba(22,163,74,.14), transparent 60%),
+    radial-gradient(850px 360px at 85% 0%, rgba(37,99,235,.12), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
   color: var(--text);
 }
 
-/* Reduce márgenes generales + look “card” */
+/* “Court lines” sutiles */
+[data-testid="stAppViewContainer"]::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events:none;
+  opacity: .35;
+  background:
+    linear-gradient(90deg, rgba(15,23,42,.04) 1px, transparent 1px) 0 0 / 140px 140px,
+    linear-gradient(0deg, rgba(15,23,42,.03) 1px, transparent 1px) 0 0 / 140px 140px;
+  mask-image: radial-gradient(circle at 50% 0%, black 20%, transparent 62%);
+}
+
+/* ---------- Layout compacto (mantiene tu compact) ---------- */
 .block-container{
   padding-top: 0.8rem;
   padding-bottom: 1.2rem;
   max-width: 900px;
 }
+div[data-testid="stVerticalBlock"] > div { gap: 0.6rem; }
+header[data-testid="stHeader"]{ height: 0.6rem; background: transparent; }
 
-/* Reduce espacios entre elementos */
-div[data-testid="stVerticalBlock"] > div {gap: 0.6rem;}
-
-/* Header Streamlit compacto */
-header[data-testid="stHeader"] {height: 0.6rem; background: transparent;}
-
-/* Tipografía */
+/* ---------- Tipografía y markdown ---------- */
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-h1, h2, h3, h4 { letter-spacing: .2px; }
-
-/* Subtítulos y textos */
+h1,h2,h3 { letter-spacing: .2px; }
 [data-testid="stMarkdownContainer"] p,
 [data-testid="stMarkdownContainer"] li,
-[data-testid="stMarkdownContainer"] span {
-  color: var(--text);
-}
+[data-testid="stMarkdownContainer"] span { color: var(--text); }
+
 .small-note{
   color: var(--muted);
   font-size: 0.92rem;
@@ -83,171 +100,220 @@ h1, h2, h3, h4 { letter-spacing: .2px; }
 }
 .kpi{
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--text);
 }
 
-/* Divider + hr */
+/* ---------- Divider / hr ---------- */
 hr, [data-testid="stDivider"]{
-  border-color: rgba(255,255,255,0.10) !important;
+  border-color: var(--stroke2) !important;
   margin: 0.55rem 0;
 }
 
-/* ======= NAV "casillas" ======= */
-.navwrap {margin: 0.4rem 0 0.8rem 0;}
-.navtitle {
-  font-weight: 900;
-  font-size: 1.15rem;
-  margin-bottom: .3rem;
-  color: var(--text);
+/* ---------- “Top bar” sutil para la zona superior ---------- */
+.block-container::before{
+  content:"";
+  display:block;
+  height: 10px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(22,163,74,.35), rgba(37,99,235,.28));
+  filter: blur(.2px);
+  opacity: .75;
 }
 
-/* ======= Inputs (selectbox / text / number) ======= */
+/* ---------- Inputs (select/text/number) ---------- */
 div[data-baseweb="select"] > div,
 div[data-baseweb="input"] > div,
 div[data-baseweb="textarea"] > div{
-  background: rgba(255,255,255,0.06) !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: linear-gradient(180deg, var(--card), var(--card2)) !important;
+  border: 1px solid var(--stroke) !important;
   border-radius: 14px !important;
-  box-shadow: 0 6px 16px rgba(0,0,0,.14);
+  box-shadow: var(--shadow2);
 }
 div[data-baseweb="input"] input,
 div[data-baseweb="textarea"] textarea{
   color: var(--text) !important;
 }
 label, .stTextInput label, .stSelectbox label, .stNumberInput label{
-  color: var(--muted) !important;
-  font-weight: 700 !important;
+  color: var(--muted2) !important;
+  font-weight: 800 !important;
+}
+div[data-baseweb="input"] input { padding-top: 0.45rem; padding-bottom: 0.45rem; }
+
+/* Focus ring pro */
+div[data-baseweb="select"] > div:focus-within,
+div[data-baseweb="input"] > div:focus-within,
+div[data-baseweb="textarea"] > div:focus-within{
+  outline: none !important;
+  box-shadow: var(--shadow2), var(--focus) !important;
+  border-color: rgba(37,99,235,.35) !important;
 }
 
-/* Inputs compactos (manteniendo tu compact) */
-div[data-baseweb="input"] input {padding-top: 0.45rem; padding-bottom: 0.45rem;}
-
-/* ======= Botones ======= */
+/* ---------- Botones (estética deportiva) ---------- */
 .stButton>button{
   width: 100%;
   padding: 0.52rem 0.9rem;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  border: 1px solid var(--stroke);
+  background: linear-gradient(180deg, #ffffff, #f5f7fb);
   color: var(--text);
-  font-weight: 800;
+  font-weight: 900;
   box-shadow: var(--shadow2);
-  transition: transform .05s ease, border-color .15s ease, background .15s ease;
+  transition: transform .06s ease, box-shadow .12s ease, border-color .12s ease;
 }
 .stButton>button:hover{
-  border-color: rgba(37,211,102,0.50);
-  background: linear-gradient(180deg, rgba(37,211,102,0.14), rgba(255,255,255,0.06));
+  border-color: rgba(22,163,74,.35);
+  box-shadow: 0 14px 28px rgba(2,6,23,.12);
 }
 .stButton>button:active{
   transform: translateY(1px) scale(0.99);
 }
 
-/* Download button (misma estética) */
+/* Botones “primarios” (sin cambiar su posición):
+   - hacemos que TODOS se vean premium
+   - y resaltamos con borde/acento sutil */
+.stButton>button:focus{
+  outline: none !important;
+  box-shadow: var(--shadow2), var(--focus) !important;
+}
+
+/* ---------- Download button coherente ---------- */
 [data-testid="stDownloadButton"] > button{
   border-radius: 14px !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  background: linear-gradient(180deg, rgba(59,130,246,0.16), rgba(255,255,255,0.06)) !important;
+  border: 1px solid rgba(37,99,235,.22) !important;
+  background: linear-gradient(180deg, rgba(37,99,235,.14), rgba(255,255,255,0.98)) !important;
   color: var(--text) !important;
-  font-weight: 850 !important;
+  font-weight: 950 !important;
   box-shadow: var(--shadow2) !important;
 }
 [data-testid="stDownloadButton"] > button:hover{
-  border-color: rgba(59,130,246,0.55) !important;
+  border-color: rgba(37,99,235,.38) !important;
 }
 
-/* ======= Expander / Cards ======= */
+/* ---------- Expander / Cards ---------- */
 [data-testid="stExpander"]{
-  border: 1px solid rgba(255,255,255,0.10) !important;
+  border: 1px solid var(--stroke) !important;
   border-radius: var(--radius) !important;
-  background: rgba(255,255,255,0.05) !important;
+  background: linear-gradient(180deg, var(--card), var(--card2)) !important;
   box-shadow: var(--shadow);
   overflow: hidden;
 }
 [data-testid="stExpander"] summary{
-  font-weight: 900 !important;
+  font-weight: 950 !important;
   color: var(--text) !important;
 }
 [data-testid="stExpander"] summary:hover{
-  background: rgba(255,255,255,0.04) !important;
+  background: rgba(15,23,42,0.02) !important;
 }
 
-/* ======= Tabs ======= */
+/* ---------- Tabs estilo app ---------- */
 [data-baseweb="tab-list"]{
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.70);
+  border: 1px solid var(--stroke);
   border-radius: 16px;
   padding: 6px;
   gap: 6px;
+  box-shadow: var(--shadow2);
 }
 button[role="tab"]{
   border-radius: 12px !important;
-  font-weight: 900 !important;
+  font-weight: 950 !important;
   color: var(--muted) !important;
 }
 button[role="tab"][aria-selected="true"]{
-  background: linear-gradient(180deg, rgba(37,211,102,0.18), rgba(255,255,255,0.06)) !important;
+  background: linear-gradient(180deg, rgba(22,163,74,.16), rgba(255,255,255,.95)) !important;
   color: var(--text) !important;
-  border: 1px solid rgba(37,211,102,0.35) !important;
+  border: 1px solid rgba(22,163,74,.25) !important;
 }
 
-/* ======= Metric ======= */
+/* ---------- Metric cards (tipo dashboard) ---------- */
 [data-testid="stMetric"]{
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 16px;
-  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--card), var(--card2));
   padding: 14px 14px 12px 14px;
   box-shadow: var(--shadow2);
+  position: relative;
+  overflow: hidden;
+}
+[data-testid="stMetric"]::after{
+  content:"";
+  position:absolute;
+  inset:-40% -40% auto auto;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(22,163,74,.18), transparent 60%);
+  transform: rotate(18deg);
 }
 [data-testid="stMetricLabel"]{
-  color: var(--muted) !important;
-  font-weight: 800 !important;
+  color: var(--muted2) !important;
+  font-weight: 900 !important;
 }
 [data-testid="stMetricValue"]{
   color: var(--text) !important;
-  font-weight: 950 !important;
+  font-weight: 1000 !important;
 }
 [data-testid="stMetricDelta"]{
-  color: rgba(37,211,102,0.95) !important;
-  font-weight: 850 !important;
+  color: rgba(22,163,74,0.95) !important;
+  font-weight: 950 !important;
 }
 
-/* ======= Alerts ======= */
+/* ---------- Alerts ---------- */
 [data-testid="stAlert"]{
   border-radius: 16px !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid var(--stroke) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.82)) !important;
   box-shadow: var(--shadow2);
 }
 
-/* ======= File uploader ======= */
+/* ---------- File uploader ---------- */
 section[data-testid="stFileUploaderDropzone"]{
   border-radius: 16px !important;
-  border: 1px dashed rgba(255,255,255,0.22) !important;
-  background: rgba(255,255,255,0.04) !important;
+  border: 1px dashed rgba(15,23,42,0.20) !important;
+  background: rgba(255,255,255,0.60) !important;
+  box-shadow: var(--shadow2);
 }
 
-/* ======= Caption ======= */
-.stCaption, [data-testid="stCaptionContainer"]{
-  color: var(--muted2) !important;
+/* ---------- Nav title ---------- */
+.navwrap { margin: 0.4rem 0 0.8rem 0; }
+.navtitle{
+  font-weight: 1000;
+  font-size: 1.1rem;
+  margin-bottom: .35rem;
+  color: var(--text);
 }
 
-/* Quitar borde de charts container si aparece */
-[data-testid="stLineChart"], canvas{
+/* ---------- Chips/badges si los usas ---------- */
+.badge{
+  display:inline-block;
+  padding: 0.22rem 0.62rem;
+  border-radius: 999px;
+  background: rgba(22,163,74,.10);
+  border: 1px solid rgba(22,163,74,.18);
+  margin-right: .35rem;
+  margin-bottom: .35rem;
+  color: var(--text);
+  font-weight: 850;
+}
+
+/* ---------- Charts container suavizado ---------- */
+canvas{
   border-radius: 14px !important;
 }
 
-/* Scrollbar (opcional) */
+/* ---------- Scrollbar ---------- */
 ::-webkit-scrollbar{ width: 10px; }
 ::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,0.14);
+  background: rgba(15,23,42,0.14);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover{
-  background: rgba(37,211,102,0.22);
+  background: rgba(22,163,74,0.22);
 }
 </style>
 """
+
 st.markdown(COMPACT_CSS, unsafe_allow_html=True)
 
 
@@ -1454,3 +1520,4 @@ else:
                 ></iframe>
                 """
                 st.components.v1.html(html, height=680, scrolling=False)
+
